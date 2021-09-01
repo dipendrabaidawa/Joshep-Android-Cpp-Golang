@@ -6,6 +6,7 @@
 # Node artifact files
 node_modules/
 dist/
+*.zip
 
 # Compiled Java class files
 *.class
@@ -52,4 +53,7 @@ Thumbs.db
 *.pro.user
 build
 bin
+
+# server test
+server_test/
 

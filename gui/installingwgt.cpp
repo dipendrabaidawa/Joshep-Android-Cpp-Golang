@@ -1,15 +1,11 @@
-#include "mainview.h"
+#include "installingwgt.h"
+#include "ui_installingwgt.h"
 
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QTextEdit>
-#include <QLineEdit>
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QApplication>
 #include <QFile>
-
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -17,56 +13,73 @@
 #include <QRandomGenerator>
 #include <QThreadPool>
 #include <QDir>
+#include <QTimer>
 
-#include "adbwrapper.h"
-
-#include <string>
 #include "rsaencryption.h"
 #include "aesencryption.h"
 #include "apkinstallworker.h"
+#include "utils.h"
 
-MainView::MainView(QWidget* parent): QWidget(parent)
+#define defEndpoint "http://localhost:8080"
+
+InstallingWgt::InstallingWgt(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::InstallingWgt)
 {
+    ui->setupUi(this);
+
     m_manager = new QNetworkAccessManager(this);
 
-    auto vLayout = new QVBoxLayout(this);
-    auto hLayout = new QHBoxLayout();
+    timerPB = new QTimer (this);
+    timerPB->setInterval(100);
 
-    hLayout->addWidget( m_sendApkRequest = new QPushButton(tr("Run")) );
-    hLayout->addWidget( m_encryptButton = new QPushButton("Encode"));
-    hLayout->addWidget( m_installApkButton = new QPushButton("Start Install"));
-    hLayout->addWidget( m_stopInstallButton = new QPushButton("Stop Install"));
-
-    vLayout->addLayout(hLayout);
-    vLayout->addWidget( m_endpoint = new QLineEdit(),0, Qt::AlignLeft);
-    vLayout->addWidget( m_output = new QTextEdit(),1 );
-
-    connect(m_sendApkRequest, &QPushButton::clicked, this, &MainView::sendApkRequest);
-    connect(m_installApkButton, &QPushButton::clicked, this, &MainView::installApkOnDevice);
-    connect(m_stopInstallButton, &QPushButton::clicked, this, &MainView::onStopInstall);
-
-
-    m_endpoint->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    m_endpoint->setText("http://localhost:8080");
-    m_endpoint->setMinimumWidth(350);
-    m_stopInstallButton->setEnabled(false);
+    connect (timerPB, &QTimer::timeout,
+             this, &InstallingWgt::onTimeoutPB);
 }
 
-void MainView::generateRsa()
+InstallingWgt::~InstallingWgt()
+{
+    delete ui;
+}
+
+void InstallingWgt::onTimeoutPB ()
+{
+    auto curValue = ui->progressBarInstall->property("dbValue").toDouble ();
+    curValue += (100.f - curValue) / 20;
+    ui->progressBarInstall->setValue(curValue);
+    ui->progressBarInstall->setProperty("dbValue", curValue);
+}
+
+void InstallingWgt::onInstallError (QString title, QString what, QString where, QString details)
+{
+    m_output += details;
+    emit sigError (title, what, where, m_output);
+}
+
+void InstallingWgt::startInstalling ()
+{
+    m_output.clear ();
+    ui->progressBarInstall->setValue(0);
+    ui->progressBarInstall->setProperty("dbValue", 0.f);
+    timerPB->start ();
+    sendApkRequest ();
+}
+
+void InstallingWgt::generateRsa()
 {
     m_rsaEncryption.generate();
-    m_output->append(m_rsaEncryption.publicKey());
+    m_output.append(m_rsaEncryption.publicKey());
 
 }
 
-void MainView::sendApkRequest()
+void InstallingWgt::sendApkRequest()
 {
     //generate RSA
     writeLog("Generate RSA...");
     m_rsaEncryption.generate();
     writeLog("[OK] Generate RSA");
 
-    QString endpoint = m_endpoint->text();
+    QString endpoint = defEndpoint;
     const QUrl url(endpoint+"/encrypt");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -102,21 +115,32 @@ void MainView::sendApkRequest()
                 runDownloadFile(id,key);
             }else{
                writeLog(QString("[FAILED] Parse response.'%1'").arg(resp));
+               onInstallError ("Error: WebApp",
+                               "Webapp error: error occured during parsing response from WebApp",
+                               "An error occured during parsing response from WebApp. See \"Details\"\n"
+                               "section to get more detailed information about the error.",
+                               m_output);
+               emit sigFail ();
             }
 
         }
-        else
-        {
+        else {
             writeLog(QString("[FAILED] Send request 'encrypt'. Err:'%1'").arg(reply->errorString()));
+            onInstallError ("Error: WebApp",
+                            "Webapp error: error occured during sending requests to WebApp",
+                            "An error occured during sending requests to WebApp. See \"Details\"\n"
+                            "section to get more detailed information about the error.",
+                            m_output);
+            emit sigFail ();
         }
         reply->deleteLater();
     });
 
 }
 
-void MainView::runDownloadFile(const QString &id, const QByteArray &key)
+void InstallingWgt::runDownloadFile(const QString &id, const QByteArray &key)
 {
-    QString endpoint = m_endpoint->text();
+    QString endpoint = defEndpoint;
     const QUrl url(endpoint+"/download?id="+id);
     QNetworkRequest request(url);
     writeLog(QString("Donload file..."));
@@ -126,7 +150,7 @@ void MainView::runDownloadFile(const QString &id, const QByteArray &key)
         if(reply->error() == QNetworkReply::NoError){
             writeLog(QString("[OK] Download file"));
             QString appFolder = qApp->applicationDirPath();
-            QString encodedFilePath = QString("%1/%2").arg(appFolder).arg(id);
+            QString encodedFilePath = QString("%1/%2").arg(appFolder, id);
             writeLog("Save file...");
             bool ok = saveToDisk(encodedFilePath, reply);
             if(ok){
@@ -139,8 +163,15 @@ void MainView::runDownloadFile(const QString &id, const QByteArray &key)
                 int ret = aes.dectyptFile(encodedFilePath, key, decryptedFile);
                 if(ret == 0){
                     writeLog( QString("[OK] Decrypt file to:'%1'").arg(decryptedFile));
+                    installApkOnDevice ();
                 }else{
                     writeLog( QString("[FAILED] Decrypt file:'%1'").arg(encodedFilePath));
+                    emit sigFail ();
+                    onInstallError ("Error: Decryption",
+                                    "Decryption error: error occured while file decription",
+                                    "An error occured while file decription. See \"Details\"\n"
+                                    "section to get more detailed information about the error.",
+                                    m_output);
                 }
 
                 //remove encoded file
@@ -148,22 +179,28 @@ void MainView::runDownloadFile(const QString &id, const QByteArray &key)
 
             }else{
                 writeLog(QString("[FAILED] Save file to:'%1'").arg(encodedFilePath));
+                emit sigFail ();
+                onInstallError ("Error: Save File",
+                                "Save File error: error occured while file was saving in disk",
+                                "An error occured while file was saving in disk. See \"Details\"\n"
+                                "section to get more detailed information about the error.",
+                                m_output);
             }
 
         }else{
             writeLog(QString("[FAILED] Download file. Err:'%1'").arg(reply->errorString()));
+            emit sigFail ();
         }
         reply->deleteLater();
     });
 }
 
-bool MainView::saveToDisk(const QString &filename, QIODevice *data)
+bool InstallingWgt::saveToDisk(const QString &filename, QIODevice *data)
 {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
         QString dbg =QString("Could not open %1 for writing: %2")
-                .arg(filename)
-                .arg(file.errorString());
+                .arg(filename, file.errorString());
 
         writeLog(dbg);
         return false;
@@ -175,13 +212,13 @@ bool MainView::saveToDisk(const QString &filename, QIODevice *data)
     return true;
 }
 
-void MainView::writeLog(const QString &msg)
+void InstallingWgt::writeLog(const QString &msg)
 {
-    m_output->append(msg);
+    m_output.append(msg);
 }
 
 
-void MainView::installApkOnDevice()
+void InstallingWgt::installApkOnDevice()
 {
     QString apkFilaPath = qApp->applicationDirPath() +"/app-release.apk";
     apkFilaPath = decryptedFile;
@@ -199,27 +236,30 @@ void MainView::installApkOnDevice()
 
     if(m_worker == nullptr){
         m_worker = new ApkInstallWorker(apkFilaPath, packageName, deviceFoder, pubFileName, localFolder);
-        connect(m_worker, &ApkInstallWorker::message, this, &MainView::writeLog, Qt::QueuedConnection );
-        connect(m_worker, &ApkInstallWorker::finished, this, &MainView::onCompleteWorker, Qt::QueuedConnection);
-        connect(m_worker, &ApkInstallWorker::started, this,&MainView::onStartWorker, Qt::QueuedConnection );
+        connect(m_worker, &ApkInstallWorker::message, this, &InstallingWgt::writeLog, Qt::QueuedConnection );
+        connect(m_worker, &ApkInstallWorker::sigError, this, &InstallingWgt::onInstallError, Qt::QueuedConnection );
+        connect(m_worker, &ApkInstallWorker::finished, this, &InstallingWgt::onCompleteWorker, Qt::QueuedConnection);
+        connect(m_worker, &ApkInstallWorker::started, this,&InstallingWgt::onStartWorker, Qt::QueuedConnection );
         m_pool.start(m_worker);
     }
 }
 
-void MainView::onStartWorker()
+void InstallingWgt::onStartWorker()
 {
-    m_installApkButton->setEnabled(false);
-    m_stopInstallButton->setEnabled(true);
 }
 
-void MainView::onCompleteWorker()
+void InstallingWgt::onCompleteWorker()
 {
-    m_installApkButton->setEnabled(true);
-    m_stopInstallButton->setEnabled(false);
     m_worker = nullptr;
+    timerPB->stop ();
+    ui->progressBarInstall->setValue(100);
+    if (m_output.contains ("[FAILED]"))
+        emit sigFail ();
+    else
+        emit sigSuccess ();
 }
 
-void MainView::onStopInstall()
+void InstallingWgt::onStopInstall()
 {
     if(m_worker == nullptr){
         return;
@@ -227,3 +267,4 @@ void MainView::onStopInstall()
 
     m_worker->cancel();
 }
+

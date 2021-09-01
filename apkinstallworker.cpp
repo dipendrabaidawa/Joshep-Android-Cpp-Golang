@@ -13,12 +13,12 @@ ApkInstallWorker::ApkInstallWorker(const QString &apkFilePath
                                    , const QString &publicKeyFileName
                                    , const QString &localFolder)
     : QObject(), QRunnable()
-    , m_canceled(false)
-    , m_apkFilePath(apkFilePath)
-    , m_packageName(packageName)
     , m_deviceFolder(deviceFolder)
     , m_publicKeyFileName(publicKeyFileName)
+    , m_packageName(packageName)
+    , m_apkFilePath(apkFilePath)
     , m_localFolder(localFolder)
+    , m_canceled(false)
 {
 }
 
@@ -27,7 +27,10 @@ void ApkInstallWorker::run()
     emit started();
 
     QString res;
-    AdbWrapper().clearFolderOnDevice(m_deviceFolder,res);
+    bool isError {false};
+    QProcess::ProcessError error {QProcess::UnknownError};
+
+    AdbWrapper().clearFolderOnDevice(m_deviceFolder,res, isError, error);
 
     m_state = InstallStates::ClearDeviceFolderState;
 
@@ -47,9 +50,18 @@ void ApkInstallWorker::run()
             emit message("Clear device folder...");
             AdbWrapper adb;
             QString ret;
-            adb.clearFolderOnDevice(m_deviceFolder, ret);
+            adb.clearFolderOnDevice(m_deviceFolder, ret, isError, error);
             emit message(ret);
-            m_state = InstallStates::PushApkState;
+            if (isError) {
+                m_state = InstallStates::CompleteState;
+                m_lastError = "Failed to clear device folder";
+                emit sigError( "Error: Adb Module",
+                            AdbWrapper::errorWhat(error),
+                            AdbWrapper::errorWhere(),
+                            AdbWrapper::errorDetails(error) + "\n" + m_lastError);
+            }
+            else
+                m_state = InstallStates::PushApkState;
         }
             break;
         case PushApkState:
@@ -111,7 +123,14 @@ void ApkInstallWorker::run()
             break;
         case CompleteState:
         {
-
+            if (!m_lastError.isEmpty()) {
+                emit sigError( "Error: ApkInstaller module",
+                            "WindowsInstaller.ApkInstaller: " + m_lastError,
+                            "An error occured during apk installation. See \"Details\"\n"
+                            "section to get more detailed information about the error.",
+                            "\n" + m_lastError);
+            }
+            m_lastError.clear ();
         }
             break;
         default:
@@ -119,7 +138,7 @@ void ApkInstallWorker::run()
         }
     }
 
-    for(auto path:m_filesToClean){
+    for(const auto & path:m_filesToClean){
         QFile::remove(path);
     }
 
@@ -144,8 +163,17 @@ bool ApkInstallWorker::doPushApk()
     emit message(QString("Install apk... '%1'").arg(m_apkFilePath));
     AdbWrapper adb;
     QString ret;
-    bool ok = adb.installApk(m_apkFilePath, ret);
+    bool isError {false};
+    QProcess::ProcessError error {QProcess::UnknownError};
+    bool ok = adb.installApk(m_apkFilePath, ret, isError, error);
     emit message(ret);
+    if (isError) {
+        ok = false;
+        emit sigError( "Error: Adb Module",
+                    AdbWrapper::errorWhat(error),
+                    AdbWrapper::errorWhere(),
+                    AdbWrapper::errorDetails(error));
+    }
     return ok;
 }
 
@@ -154,8 +182,17 @@ bool ApkInstallWorker::doRunApk()
     emit message(QString("Run apk..."));
     AdbWrapper adb;
     QString ret;
-    bool ok = adb.runApk(m_packageName, ret);
+    bool isError {false};
+    QProcess::ProcessError error {QProcess::UnknownError};
+    bool ok = adb.runApk(m_packageName, ret, isError, error);
     emit message(ret);
+    if (isError) {
+        ok = false;
+        emit sigError( "Error: Adb Module",
+                    AdbWrapper::errorWhat(error),
+                    AdbWrapper::errorWhere(),
+                    AdbWrapper::errorDetails(error));
+    }
     return ok;
 }
 
@@ -163,9 +200,18 @@ void ApkInstallWorker::doWaitPublicKey()
 {
     AdbWrapper adb;
     QString resp;
-    bool fileExists = adb.checkFileOnDevice(m_deviceFolder, m_publicKeyFileName, resp);
+    bool isError {false};
+    QProcess::ProcessError error {QProcess::UnknownError};
+    bool fileExists = adb.checkFileOnDevice(m_deviceFolder, m_publicKeyFileName, resp, isError, error);
     if(fileExists){
         m_state = InstallStates::ReceivePublicKeyState;
+    }
+    if (isError) {
+        m_state = InstallStates::CompleteState;
+        emit sigError( "Error: Adb Module",
+                    AdbWrapper::errorWhat(error),
+                    AdbWrapper::errorWhere(),
+                    AdbWrapper::errorDetails(error));
     }
 }
 
@@ -173,8 +219,10 @@ void ApkInstallWorker::doReceivePublicKey()
 {
     emit message("Copy public key file from device...");
     AdbWrapper adb;
-    const QString fullPath = QString("%1/%2").arg(m_deviceFolder).arg(m_publicKeyFileName);
-    bool ok = adb.copyFileFromDevice(fullPath,m_localFolder);
+    const QString fullPath = QString("%1/%2").arg(m_deviceFolder, m_publicKeyFileName);
+    bool isError {false};
+    QProcess::ProcessError error {QProcess::UnknownError};
+    bool ok = adb.copyFileFromDevice(fullPath,m_localFolder, isError, error);
     if(ok){
         emit message("[OK] Copy public key file from device");
         m_state = InstallStates::LoadPublicKeyState;
@@ -183,13 +231,20 @@ void ApkInstallWorker::doReceivePublicKey()
         emit message(m_lastError);
         m_state = InstallStates::CompleteState;
     }
+    if (isError) {
+        m_state = InstallStates::CompleteState;
+        emit sigError( "Error: Adb Module",
+                    AdbWrapper::errorWhat(error),
+                    AdbWrapper::errorWhere(),
+                    AdbWrapper::errorDetails(error));
+    }
 }
 
 void ApkInstallWorker::doLoadPublicKey()
 {
 
     emit message("Load RSA public key from file...");
-    QString fullPath = QString("%1/%2").arg(m_localFolder).arg(m_publicKeyFileName);
+    QString fullPath = QString("%1/%2").arg(m_localFolder, m_publicKeyFileName);
 
     QFile file(fullPath);
     if(!file.open(QIODevice::ReadOnly)){
@@ -233,6 +288,7 @@ void ApkInstallWorker::doGenerateInstallFiles()
     }else{
         emit message("[FAILED] Generate install files");
         m_state = InstallStates::CompleteState;
+        m_lastError = "[FAILED] Generate install files";
     }
 }
 
@@ -242,11 +298,21 @@ void ApkInstallWorker::doPushInstallFiles()
     emit message("Copy install files to device...");
     if(!m_installFileList.isEmpty()){
         for(auto file : m_installFileList){
-            bool ok = adb.copyFileToDevice(file,m_deviceFolder);
+            bool isError {false};
+            QProcess::ProcessError error {QProcess::UnknownError};
+            bool ok = adb.copyFileToDevice(file,m_deviceFolder, isError, error);
             QString msg = QString(ok ?"[OK]":"[FAILED]");
             msg += "Copy file " + file;
 
             emit message(msg);
+
+            if (isError) {
+                m_state = InstallStates::CompleteState;
+                emit sigError( "Error: Adb Module",
+                            AdbWrapper::errorWhat(error),
+                            AdbWrapper::errorWhere(),
+                            AdbWrapper::errorDetails(error));
+            }
         }
 
         m_filesToClean.append(m_installFileList);

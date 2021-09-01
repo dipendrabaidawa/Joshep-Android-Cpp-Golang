@@ -33,6 +33,7 @@ signals:
     void started();
     void finished();
     void message(QString msg);
+    void sigError (QString title, QString what, QString where, QString details);
 private:
     bool doPushApk();
     bool doRunApk();

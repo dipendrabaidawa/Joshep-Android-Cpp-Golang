@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gui/css/dark.css</file>
+        <file>gui/icons/Step_completed.png</file>
+        <file>gui/icons/Step_current.png</file>
+        <file>gui/icons/Step_not_completed.png</file>
+        <file>gui/icons/question.png</file>
+        <file>gui/icons/error.png</file>
+    </qresource>
+</RCC>

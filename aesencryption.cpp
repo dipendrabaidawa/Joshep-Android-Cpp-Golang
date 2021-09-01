@@ -232,5 +232,7 @@ void AesEncryption::file_encrypt_decrypt(cipher_params_t *params, QFile *ifp, QF
 
 void AesEncryption::cleanup(cipher_params_t *params, QFile *ifp, QFile *ofp)
 {
-
+    Q_UNUSED(params);
+    Q_UNUSED(ifp);
+    Q_UNUSED(ofp);
 }
