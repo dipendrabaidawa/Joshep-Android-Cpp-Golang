@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CustomerInfoWgt</class>
+ <widget class="QWidget" name="CustomerInfoWgt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1085</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <property name="leftMargin">
+    <number>30</number>
+   </property>
+   <property name="topMargin">
+    <number>30</number>
+   </property>
+   <property name="rightMargin">
+    <number>30</number>
+   </property>
+   <property name="bottomMargin">
+    <number>30</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBoxCustomerInfo">
+       <property name="title">
+        <string>Customer Information</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="leftMargin">
+         <number>20</number>
+        </property>
+        <property name="topMargin">
+         <number>20</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <property name="bottomMargin">
+         <number>20</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lineEditFirstName">
+          <property name="placeholderText">
+           <string>First Name*</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditLastName">
+          <property name="placeholderText">
+           <string>Last Name*</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditHomePhone">
+          <property name="placeholderText">
+           <string>Home Phone*</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditBusinessPhone">
+          <property name="placeholderText">
+           <string>Business Phone*</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBoxCommunityFilterLevel">
+       <property name="title">
+        <string>Community &amp;&amp;  Filter level</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>20</number>
+        </property>
+        <property name="topMargin">
+         <number>20</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <property name="bottomMargin">
+         <number>20</number>
+        </property>
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <item row="2" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelParentalBlock">
+            <property name="text">
+             <string>Parental Block*</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxParentalBlock">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text">
+              <string>No</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QWidget" name="widgetConteinerParental" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>202</width>
+              <height>59</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>202</width>
+              <height>59</height>
+             </size>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="spacing">
+              <number>15</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="lineEditParentalPhoneNumber">
+               <property name="placeholderText">
+                <string>Parental Phone Number*</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEditParentalCode">
+               <property name="placeholderText">
+                <string>Parental Code</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="2">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="horizontalSpacing">
+           <number>25</number>
+          </property>
+          <property name="verticalSpacing">
+           <number>15</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxOptionalRestrictions">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text">
+              <string>No</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelOptionalRestrictions">
+            <property name="text">
+             <string>Optional Restrictions</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QWidget" name="widgetContainerListWidget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>170</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>170</height>
+             </size>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QListWidget" name="listWidgetOptionalRestrictions">
+               <item>
+                <property name="text">
+                 <string>Camera</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Gallery</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Music</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>SD Card</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>File Manager</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>BT File Transfer</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Outgoing Calls WL</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Incoming Calls WL</string>
+                </property>
+                <property name="checkState">
+                 <enum>Unchecked</enum>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="2">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEditStickerNumber">
+            <property name="placeholderText">
+             <string>Sticker Number*</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="1">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="spacing">
+           <number>15</number>
+          </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelMeshimer">
+            <property name="text">
+             <string>Meshimer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="comboBoxMeshimer">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text">
+              <string>Email</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Talk &amp; MMS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Talk &amp; SMS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Talk Only</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelCommunity">
+            <property name="text">
+             <string>Community*</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxCommunity">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text">
+              <string>Meshimer</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Zuch</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IKO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Secure</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="checkBoxBatchInstallMode">
+     <property name="text">
+      <string>Batch Install Mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

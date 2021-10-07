@@ -1,0 +1,278 @@
+/**************************** shared *****************************************/
+
+QLineEdit
+{
+    min-width: 200px;
+    max-width: 200px;
+}
+
+QLineEdit[Short=true]
+{
+    min-width: 120px;
+    max-width: 120px;
+}
+
+QLabel[LoginSignUp=true]
+{
+    font-family: Segoe UI;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: white;
+}
+
+QLabel[Status=success]
+{
+    color: green;
+}
+
+QLabel[Status=fail]
+{
+    color: red;
+}
+
+QLabel[Status=processing]
+{
+    color: orange;
+}
+
+QLabel#labelDescription[NotLinkLS_wgt=true]
+{
+    min-width: 120px;
+    max-width: 120px;
+}
+
+
+StepWgt .QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+}
+
+StepWgt .QCheckBox::indicator:unchecked {
+    image: url(:/icons/CheckBox_off.png);
+}
+
+StepWgt .QCheckBox::indicator:checked {
+    image: url(:/icons/CheckBox_on.png);
+}
+
+QScrollBar:vertical {
+    border: 0px;
+    background: transparent;
+    background-color: transparent;
+    color: #2F80ED;
+    width: 10px;
+    margin: 0;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar::handle:vertical {
+    background: #2F80ED;
+    border-radius: 5;
+    min-height: 25px;
+}
+
+QScrollBar::add-line:vertical {
+  width: 0px;
+  height: 0px;
+  background: none;
+}
+
+QScrollBar::sub-line:vertical {
+    width: 0px;
+    height: 0px;
+    background: none;
+}
+
+QScrollBar:left-arrow:vertical, QScrollBar::right-arrow:vertical {
+    width: 0px;
+    height: 0px;
+    background: none;
+}
+
+
+/**************************** StepWgt *****************************************/
+
+StepWgt
+{
+    background-color:transparent;
+}
+
+StepWgt .QLabel#labelMarker
+{
+    border:0px;
+    min-width: 20px;
+    min-height: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+StepWgt .QLabel#labelMarker[mode=Current]
+{
+    background-image: url(":/gui/icons/Step_current.png");
+}
+
+StepWgt .QLabel#labelMarker[mode=Completed]
+{
+    background-image: url(":/gui/icons/Step_completed.png");
+}
+
+StepWgt .QLabel#labelMarker[mode=NotCompleted]
+{
+    background-image: url(":/gui/icons/Step_not_completed.png");
+}
+
+
+StepWgt .QLabel#labelDescription
+{
+    font-family: Segoe UI;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+StepWgt .QLabel#labelDescription[mode=Current]
+{
+    color: #FFFFFF;
+}
+
+StepWgt .QLabel#labelDescription[mode=Completed]
+{
+    color: #FFFFFF;
+}
+
+StepWgt .QLabel#labelDescription[mode=NotCompleted]
+{
+    color: #808080;
+}
+
+/**************************** MainWgt *****************************************/
+
+MainWgt .QFrame#frameSteps
+{
+    background-color:#333333;
+    min-width: 266px;
+    max-width: 266px;
+}
+
+
+MainWgt .QFrame#frameWindowsTytle
+{
+    background-color:#4B5056;
+    min-height: 1px;
+    max-height: 1px;
+}
+
+MainWgt .QStackedWidget#stackedWidgetWorkArea
+{
+    background-color: white;
+}
+
+MainWgt .QWidget#wgtBottom
+{
+    background-color:#4B5056;
+    min-height: 50px;
+    max-height: 50px;
+}
+
+MainWgt .QWidget#wgtBottom .QLabel#labelStatus
+{
+    font-family: Segoe UI;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: white;
+}
+
+/**************************** SignWgt *****************************************/
+
+
+SignWgt .QPushButton#pushButtonQuestion
+{
+    min-width: 20px;
+    max-width: 20px;
+    qproperty-icon:url(:/gui/icons/question.png);
+    qproperty-iconSize: 20px;
+}
+
+/**************************** LoginWgt *****************************************/
+
+
+LoginWgt .QPushButton#pushButtonQuestion
+{
+    min-width: 20px;
+    max-width: 20px;
+    qproperty-icon:url(:/gui/icons/question.png);
+    qproperty-iconSize: 20px;
+}
+
+
+/**************************** CustomerInfoWgt *****************************************/
+
+CustomerInfoWgt .QListWidget#listWidgetOptionalRestrictions
+{
+    border:0px;
+    background-color:transparent;
+    color: black;
+    outline: 0px;
+}
+
+CustomerInfoWgt .QListWidget#listWidgetOptionalRestrictions:item
+{
+    selection-color: black;
+    selection-background-color: transparent;
+}
+
+CustomerInfoWgt .QListWidget#listWidgetOptionalRestrictions::item::focus
+{
+    border-style: none;
+}
+
+/**************************** InstallingWgt *****************************************/
+
+InstallingWgt .QLabel#labelStatus
+{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    color: red;
+}
+
+/**************************** FinishedWgt *****************************************/
+
+FinishedWgt .QLabel#labelStatus
+{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+}
+
+/**************************** ErrorHandlingDlg *****************************************/
+
+ErrorHandlingDlg .QLabel#labelDetailsTitleShow
+{
+    min-width: 80px;
+    max-width: 80px;
+}
+
+ErrorHandlingDlg .QLabel#labelDetailsTitleHide
+{
+    min-width: 50px;
+    max-width: 50px;
+}
+
+ErrorHandlingDlg .QLabel#labelDetailsTitleShow
+{
+    min-width: 50px;
+    max-width: 50px;
+}
+
+ErrorHandlingDlg .QLabel[sub_title=true]
+{
+    font-weight: bold;
+}

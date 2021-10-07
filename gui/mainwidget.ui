@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWgt</class>
+ <widget class="QWidget" name="MainWgt">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>689</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" colspan="2">
+    <widget class="QFrame" name="frameWindowsTytle">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QFrame" name="frameSteps">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>26</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>50</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="StepWgt" name="widgetStep1" native="true"/>
+      </item>
+      <item>
+       <widget class="StepWgt" name="widgetStep2" native="true"/>
+      </item>
+      <item>
+       <widget class="StepWgt" name="widgetStep3" native="true"/>
+      </item>
+      <item>
+       <widget class="StepWgt" name="widgetStep4" native="true"/>
+      </item>
+      <item>
+       <widget class="StepWgt" name="widgetStep5" native="true"/>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QStackedWidget" name="stackedWidgetWorkArea">
+     <widget class="LoginSignWgt" name="loginSignUp"/>
+     <widget class="CustomerInfoWgt" name="customerInfo"/>
+     <widget class="DeviceInfoWgt" name="deviceInfo"/>
+     <widget class="InstallingWgt" name="installing"/>
+     <widget class="FinishedWgt" name="finished"/>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QWidget" name="wgtBottom" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pushButtonLogout">
+        <property name="text">
+         <string>Logout</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelStatus">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Not logged in</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonNext">
+        <property name="text">
+         <string>Next</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonStart">
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StepWgt</class>
+   <extends>QWidget</extends>
+   <header>stepwgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoginSignWgt</class>
+   <extends>QWidget</extends>
+   <header>loginsignwgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DeviceInfoWgt</class>
+   <extends>QWidget</extends>
+   <header>deviceinfowgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomerInfoWgt</class>
+   <extends>QWidget</extends>
+   <header>customerinfowgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InstallingWgt</class>
+   <extends>QWidget</extends>
+   <header>installingwgt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FinishedWgt</class>
+   <extends>QWidget</extends>
+   <header>finishedwgt.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
